@@ -1,85 +1,85 @@
-# MQTT INSIS Project
+# Proyek MQTT INSIS
 
-This project demonstrates advanced MQTTv5 features using Python (`paho-mqtt`) and includes a real-time React-based monitoring dashboard. It was developed to simulate and visualize sensor data, system events, and remote procedure calls using the MQTT protocol.
+Proyek ini mendemonstrasikan fitur-fitur MQTTv5 tingkat lanjut menggunakan Python (`paho-mqtt`) dan dilengkapi dengan dashboard pemantauan *real-time* berbasis React. Proyek ini dikembangkan untuk menyimulasikan dan memvisualisasikan data sensor, *event* sistem, dan *Remote Procedure Call* (RPC) menggunakan protokol MQTT.
 
-## Features Demonstrated (MQTTv5)
+## Fitur MQTTv5 yang Didemonstrasikan
 
-The project implements the following key features of the MQTTv5 specification:
-1. **QoS (Quality of Service) 1 & 2**: Ensuring message delivery for critical data like alarms.
-2. **Topic Wildcards (`+` and `#`)**: Flexible subscription patterns for data logging.
-3. **Topic Alias**: Optimizing bandwidth by replacing long topic strings with integer aliases.
-4. **User Properties**: Attaching custom metadata (e.g., `severity`, `region`) to publish messages.
-5. **Retain**: Storing the last known good value (like temperature) on the broker for new subscribers.
-6. **Message Expiry Interval**: Setting a time-to-live for messages so outdated data is discarded.
-7. **Last Will and Testament (LWT)**: Notifying the system when a client (like the alarm system) disconnects unexpectedly.
-8. **Request-Response (RPC)**: Implementing two-way communication over MQTT using `ResponseTopic` and `CorrelationData`.
-9. **Shared Subscriptions (`$share/group/topic`)**: Load balancing incoming messages across multiple worker instances.
-10. **Flow Control**: Managing concurrent message limits using the `ReceiveMaximum` property to prevent overwhelming the subscriber.
+Proyek ini mengimplementasikan fitur-fitur utama dari spesifikasi MQTTv5 berikut:
+1. **QoS (Quality of Service) 1 & 2**: Memastikan pengiriman pesan untuk data penting seperti alarm.
+2. **Topic Wildcards (`+` dan `#`)**: Pola *subscription* fleksibel untuk *data logging*.
+3. **Topic Alias**: Mengoptimalkan *bandwidth* dengan mengganti string topik yang panjang dengan alias angka.
+4. **User Properties**: Menyisipkan metadata kustom (misalnya, `severity`, `region`) pada pesan yang di-*publish*.
+5. **Retain**: Menyimpan nilai terakhir yang valid (seperti suhu) di broker agar langsung diterima oleh *subscriber* baru.
+6. **Message Expiry Interval**: Mengatur waktu kedaluwarsa (*time-to-live*) untuk pesan agar data yang sudah usang dibuang.
+7. **Last Will and Testament (LWT)**: Memberikan notifikasi sistem ketika klien (seperti sistem alarm) terputus secara tidak terduga.
+8. **Request-Response (RPC)**: Mengimplementasikan komunikasi dua arah via MQTT menggunakan properti `ResponseTopic` dan `CorrelationData`.
+9. **Shared Subscriptions (`$share/group/topic`)**: Melakukan *load balancing* untuk pesan yang masuk ke beberapa *instance* pekerja (*worker*).
+10. **Flow Control**: Mengelola batas pesan konkuren menggunakan properti `ReceiveMaximum` untuk mencegah *subscriber* menerima terlalu banyak pesan sekaligus.
 
-## Project Structure
+## Struktur Proyek
 
-- `pub.py`: Contains multiple MQTT Publisher scripts simulating different scenarios:
-  - **Sensor Suhu**: Publishes temperature data (Retain, Expiry, QoS 1).
-  - **Sistem Alarm**: Publishes critical alarms and manages LWT (User Properties, QoS 2, LWT).
-  - **RPC Client**: Sends requests and expects responses (Topic Alias, Request-Response).
-- `subs.py`: Contains MQTT Subscriber scripts handling incoming data:
-  - **Data Logger**: Listens to multiple topics using Wildcards and Shared Subscriptions.
-  - **RPC Server & Manager**: Handles incoming RPC requests, sends responses, and implements Flow Control.
-- `mqtt-dashboard/`: A Vite + React web application that visualizes the MQTT data, including gauge charts for temperature and logs for system events.
+- `pub.py`: Berisi beberapa skrip *Publisher* MQTT yang menyimulasikan berbagai skenario:
+  - **Sensor Suhu**: Mem-*publish* data suhu (menggunakan Retain, Expiry, QoS 1).
+  - **Sistem Alarm**: Mem-*publish* alarm kritis dan mengelola LWT (menggunakan User Properties, QoS 2, LWT).
+  - **RPC Client**: Mengirimkan *request* dan menunggu *response* (menggunakan Topic Alias, Request-Response).
+- `subs.py`: Berisi skrip *Subscriber* MQTT untuk menangani data yang masuk:
+  - **Data Logger**: Mendengarkan berbagai topik menggunakan Wildcards dan Shared Subscriptions.
+  - **RPC Server & Manager**: Menangani *request* RPC yang masuk, mengirimkan balasan, dan mengimplementasikan Flow Control.
+- `mqtt-dashboard/`: Aplikasi web berbasis Vite + React yang memvisualisasikan data MQTT, termasuk grafik *gauge* untuk suhu dan log untuk *event* sistem.
 
-## Prerequisites
+## Prasyarat
 
 - **Python 3.7+**
-- **Node.js** (v16+ recommended) and **npm**
-- An MQTTv5 compatible broker. The code is currently configured to use the public EMQX broker (`broker.emqx.io`).
+- **Node.js** (direkomendasikan v16+) dan **npm**
+- Broker MQTT yang kompatibel dengan MQTTv5. Kode saat ini dikonfigurasi untuk menggunakan broker publik EMQX (`broker.emqx.io`).
 
-## Installation & Setup
+## Instalasi & Persiapan
 
-### 1. Python Environment
+### 1. Lingkungan Python
 
-Install the required Python library:
+Instal *library* Python yang dibutuhkan:
 ```bash
 pip install paho-mqtt
 ```
 
 ### 2. Dashboard
 
-Navigate to the dashboard directory and install the necessary Node modules:
+Masuk ke direktori dashboard dan instal modul Node yang diperlukan:
 ```bash
 cd mqtt-dashboard
 npm install
 ```
 
-## Running the Application
+## Menjalankan Aplikasi
 
-To see the full system in action, you should run the components in multiple terminal windows.
+Untuk melihat sistem berjalan secara penuh, Anda harus menjalankan setiap komponen di terminal yang terpisah.
 
-### 1. Start the Dashboard
-In the first terminal, navigate to the `mqtt-dashboard` directory and start the Vite development server:
+### 1. Jalankan Dashboard
+Pada terminal pertama, masuk ke direktori `mqtt-dashboard` dan jalankan *server* *development* Vite:
 ```bash
 cd mqtt-dashboard
 npm run dev
 ```
-Open your browser to the URL provided in the terminal (usually `http://localhost:5173`) to view the real-time dashboard.
+Buka *browser* Anda ke URL yang ditampilkan di terminal (biasanya `http://localhost:5173`) untuk melihat dashboard *real-time*.
 
-### 2. Start the Subscribers
-In a second terminal, run `subs.py` to start listening for incoming data and handling RPC requests:
+### 2. Jalankan Subscriber
+Pada terminal kedua, jalankan `subs.py` untuk mulai mendengarkan data yang masuk dan menangani permintaan RPC:
 ```bash
 python subs.py
 ```
 
-### 3. Start the Publishers
-In a third terminal, run `pub.py` to start sending simulated sensor data, alarms, and RPC requests:
+### 3. Jalankan Publisher
+Pada terminal ketiga, jalankan `pub.py` untuk mulai mengirimkan simulasi data sensor, alarm, dan *request* RPC:
 ```bash
 python pub.py
 ```
-*Note: `pub.py` is designed to run its simulation and then exit. You can re-run it to send another batch of data to the dashboard and subscribers.*
+*Catatan: `pub.py` dirancang untuk menjalankan simulasinya lalu berhenti otomatis. Anda dapat menjalankannya kembali untuk mengirim *batch* data baru ke dashboard dan subscriber.*
 
-## Topics Reference
+## Referensi Topik
 
-The system uses the following topic structure (namespaced under `afrizan/insis/`):
-- `afrizan/insis/sensor/suhu/ruang1`: Real-time temperature sensor data.
-- `afrizan/insis/alarm/kebakaran`: Critical alarm notifications.
-- `afrizan/insis/status/lwt`: Offline status notifications (Last Will).
-- `afrizan/insis/rpc/request`: Topic for incoming RPC requests.
-- `afrizan/insis/rpc/response/client123`: Topic for RPC server responses.
+Sistem ini menggunakan struktur topik berikut (berada di bawah *namespace* `afrizan/insis/`):
+- `afrizan/insis/sensor/suhu/ruang1`: Data sensor suhu *real-time*.
+- `afrizan/insis/alarm/kebakaran`: Notifikasi alarm kritis.
+- `afrizan/insis/status/lwt`: Notifikasi status *offline* (Last Will).
+- `afrizan/insis/rpc/request`: Topik untuk menerima permintaan RPC.
+- `afrizan/insis/rpc/response/client123`: Topik untuk balasan *server* RPC.
