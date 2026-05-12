@@ -8,9 +8,7 @@ from paho.mqtt.packettypes import PacketTypes
 BROKER = "broker.emqx.io" # Ganti dengan broker Anda, misal: broker.emqx.io
 PORT = 1883
 
-# ==========================================
 # SUBSCRIBER 1: Data Logger (Wildcard & Shared Subs)
-# ==========================================
 def on_message_sub1(client, userdata, msg):
     print(f"[Sub 1 - Logger] Menerima di {msg.topic}: {msg.payload.decode()} | QoS: {msg.qos}")
 
@@ -22,12 +20,11 @@ sub1.connect(BROKER, PORT)
 # Fitur 2: Wildcard (# dan +)
 # Fitur 9: Shared Subscription ($share/group_name/topic)
 sub1.subscribe("$share/logger_group/afrizan/insis/sensor/#", qos=1) 
+#sub1.subscribe("afrizan/insis/sensor/#", qos=1) # Normal Subscription pesan Retained
 sub1.subscribe("afrizan/insis/alarm/+", qos=2)
 sub1.loop_start()
 
-# ==========================================
 # SUBSCRIBER 2: RPC Server & Manager (Flow Control & Req-Res)
-# ==========================================
 def on_message_sub2(client, userdata, msg):
     print(f"[Sub 2 - RPC Server] Menerima di {msg.topic}: {msg.payload.decode()}")
     
